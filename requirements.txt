@@ -3,3 +3,4 @@ python-telegram-bot
 requests===2.25.1
 gunicorn===20.0.4
 Flask===1.1.2
+clock===0.1
