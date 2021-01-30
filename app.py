@@ -1,13 +1,10 @@
+import os
 import re
 
 import telegram
 from flask import Flask, request
 
-from config.credentials import bot_token, URL
-
-global bot
-global TOKEN
-TOKEN = bot_token
+TOKEN = os.environ['bot_token']
 bot = telegram.Bot(token=TOKEN)
 
 app = Flask(__name__)
@@ -29,12 +26,12 @@ def respond():
     if text == "/start":
         # print the welcoming message
         bot_welcome = """
-       Welcome to coolAvatar bot, the bot is using the service from http://avatars.adorable.io/ to generate cool looking avatars based on the name you enter so please enter a name and the bot will reply with an avatar for your name.
+       Welcome to coolAvatar bot, the bot is using the service from http://avatars.adorable.io/ 
+       to generate cool looking avatars based on the name you enter so please enter a name and 
+       the bot will reply with an avatar for your name.
        """
         # send the welcoming message
         bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
-
-
     else:
         try:
             # clear the message we got from any non alphabets
@@ -53,11 +50,11 @@ def respond():
     return 'ok'
 
 
-@app.route('/setwebhook', methods=['GET', 'POST'])
+@app.route('/webhook', methods=['GET', 'POST'])
 def set_webhook():
     # we use the bot object to link the bot to our app which live
     # in the link provided by URL
-    s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
+    s = bot.setWebhook('{URL}{HOOK}'.format(URL=os.environ['URL'], HOOK=TOKEN))
     # something to let us know things work
     if s:
         return "webhook setup ok"
